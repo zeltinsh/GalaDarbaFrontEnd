@@ -1,7 +1,6 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { inject, Injectable, signal, Signal } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { inject, Injectable, Signal } from "@angular/core";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +17,4 @@ export class UserService {
       observe: 'response'
     });
   }
-
-  deleteAccount(userId: number): Observable<HttpResponse<void>> {
-    return this.http.delete<void>(`${this.URL}/user/${userId}`, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      observe: 'response'
-    });
-  }
-
 }
