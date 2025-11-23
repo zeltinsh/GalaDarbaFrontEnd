@@ -1,1 +1,39 @@
-<p>login works!</p>
+<div
+  class="bg"
+  style="
+    background-image: url('images/login2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+  "
+>
+  <br />
+  <div class="container-fluid">
+    <h2>Pieslēgties sistēmai</h2>
+    <form [formGroup]="loginForm">
+      <label>
+        <h6 class="fw-bold text-grey">Lietotāja vārds:</h6>
+        <input formControlName="username" type="text" />
+      </label>
+      <label>
+        <h6 class="fw-bold text-grey">Parole:</h6>
+        <input formControlName="password" type="password" />
+      </label>
+      @if(loginForm.get('username')?.touched && !loginForm.get('username')?.invalid &&
+      loginForm.get('password')?.touched && !loginForm.get('password')?.invalid) {
+      <div class="row">
+        <div class="col-sm-2">
+          <button class="btn btn-outline-dark p-0" type="button" (click)="onSubmit()">
+            Pieslēgties
+          </button>
+        </div>
+        <div class="col-sm-5">
+          <button class="btn btn-outline-dark p-0" type="button" (click)="onSignUp()">
+            Reģistrēties
+          </button>
+        </div>
+      </div>
+      }
+    </form>
+  </div>
+</div>

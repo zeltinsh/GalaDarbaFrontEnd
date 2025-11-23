@@ -3,7 +3,7 @@ import { inject, Injectable, Signal } from "@angular/core";
 import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' //service is available application-wide. pieejams visās komponentēs
 })
 export class UserService {
 
