@@ -2,15 +2,18 @@ import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { UserInterfaces } from '../models/userinterfaces';
 import { UserService } from '../services/user-services';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
 
+  router = inject(Router); //injecting router to navigate between routes
   fb = inject(FormBuilder) //form builder instance for reactive forms.
   userService = inject(UserService); //injecting user service to handle user-related operations
 
@@ -20,8 +23,8 @@ export class Login {
       return null; //if no value, return null
     }
     let errors: ValidationErrors = {}; //initialize an empty object to hold validation errors
-    if(!/[A-Z]/.test(value)) { //check if username contains uppercase letters
-      errors ['upperCase'] = 'Field must not contain uppercase letters'; //add error if it does not
+    if(!/[A-Z]/.test(value)) { //check if password contains uppercase letters
+      errors ['upperCase'] = 'Field must contain at least one uppercase letter'; //add error if it does not
       
     }
     return Object.keys(errors).length ? errors : null; //return errors if any, else null
@@ -34,14 +37,14 @@ export class Login {
   });
 
   user: UserInterfaces = { //interface to define the structure of user data
-    username: '',
+    name: '',
     password: '',
 
   };
 
   onSubmit() { //method to handle form submission
     this.user = { //assigning form values to user object
-      username: this.loginForm.value.username || '', //assigning username from form value or empty string
+      name: this.loginForm.value.username || '', //assigning username from form value or empty string
       password: this.loginForm.value.password || '', //assigning password from form value or empty string
     };
   }

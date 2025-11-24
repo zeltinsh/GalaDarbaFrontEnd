@@ -1,6 +1,6 @@
 export interface UserInterfaces {
     id?: number;
-    username: string;
+    name: string;
     password: string;
     // [key: string]: string | number | undefined;
 }

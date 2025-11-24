@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { inject, Injectable, Signal } from "@angular/core";
+import { HttpClient, HttpHeaders,} from "@angular/common/http";
+import { inject, Injectable,} from "@angular/core";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -11,10 +11,7 @@ export class UserService {
 
   private http: HttpClient = inject(HttpClient);
 
-  logIn(userData: Signal<any>): Observable<HttpResponse<number>> {
-    return this.http.post<number>(this.URL + '/user', userData(), {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      observe: 'response'
-    });
-  }
+login (userData: any): Observable<any> {
+ return this.http.post(this.URL + '/user', userData);
+}
 }

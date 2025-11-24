@@ -19,11 +19,14 @@
         <h6 class="fw-bold text-grey">Parole:</h6>
         <input formControlName="password" type="password" />
       </label>
-      @if(loginForm.get('username')?.touched && !loginForm.get('username')?.invalid &&
-      loginForm.get('password')?.touched && !loginForm.get('password')?.invalid) {
       <div class="row">
         <div class="col-sm-2">
-          <button class="btn btn-outline-dark p-0" type="button" (click)="onSubmit()">
+          <button 
+            class="btn btn-outline-dark p-0" 
+            type="button" 
+            (click)="onSubmit()"
+            [disabled]="loginForm.invalid"
+          >
             Pieslēgties
           </button>
         </div>
@@ -33,7 +36,6 @@
           </button>
         </div>
       </div>
-      }
     </form>
   </div>
 </div>
