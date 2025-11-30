@@ -42,18 +42,17 @@ export class Login {
 
   };
 
-  onSubmit() { //method to handle form submission
-    if (this.loginForm.valid) { //check if form is valid
-      this.user = { //assigning form values to user object
-        name: this.loginForm.value.username || '', //assigning username from form value or empty string
-        password: this.loginForm.value.password || '', //assigning password from form value or empty string
+  onSubmit() { 
+    if (this.loginForm.valid) { 
+      this.user = { 
+        name: this.loginForm.value.username || '', 
+        password: this.loginForm.value.password || '', 
       };
-      // Call backend service to login
+      
       this.userService.login(this.user).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
-          // Navigate to main page after successful login
-          this.router.navigate(['/main']);
+          this.router.navigate(['/header']);
         },
         error: (error) => {
           console.error('Login failed:', error);
@@ -62,9 +61,8 @@ export class Login {
       });
     }
   }
-  onSignUp() { //method to handle sign-up action
-    console.log("Sign Up clicked"); //log a message to the console when sign-up is clicked
-    // Navigate to main page for registration
-    this.router.navigate(['/main']);
+  onSignUp() {
+    console.log("Sign Up clicked"); 
+    this.router.navigate(['/header']);
   }
 }

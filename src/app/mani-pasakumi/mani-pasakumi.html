@@ -1,0 +1,55 @@
+<div
+  class="bg"
+  style="
+    background-image: url('images/login2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+  "
+>
+  <form>
+    <div class="container-fluid mt-4">
+      @if (pasakumi().length > 0) {
+      <div class="row">
+        <div class="col-12">
+          <h3>Pasākumu saraksts</h3>
+        </div>
+      </div>
+      @for(pasakums of pasakumi(); track pasakums.id) {
+      <div class="row g-1 flex-nowrap mb-3 border-bottom pb-2">
+        <div class="col">
+          <label class="form-label small fw-bold">Pasākuma nosaukums:</label>
+          <p class="mb-0">{{ pasakums.pasakumaNosaukums }}</p>
+        </div>
+        <div class="col">
+          <label class="form-label small fw-bold">Apraksts:</label>
+          <p class="mb-0">{{ pasakums.pasakumaApraksts }}</p>
+        </div>
+        <div class="col">
+          <label class="form-label small fw-bold">Datums:</label>
+          <p class="mb-0">{{ pasakums.pasakumaDatums }}</p>
+        </div>
+        <div class="col">
+          <label class="form-label small fw-bold">Laiks:</label>
+          <p class="mb-0">{{ pasakums.pasakumaLaiks }}</p>
+        </div>
+        <div class="col">
+          <label class="form-label small fw-bold">Vieta:</label>
+          <p class="mb-0">{{ pasakums.pasakumaVieta }}</p>
+        </div>
+        <div class="col">
+          <label class="form-label small fw-bold">Dalībnieku skaits:</label>
+          <p class="mb-0">{{ pasakums.dalibniekuSkaits }}</p>
+        </div>
+      </div>
+      } } @else {
+      <div class="alert alert-info" role="alert">Nav izveidots neviens pasākums.</div>
+      <div>
+        <button class="btn btn-outline-dark p-0" type="button" (click)="navigateToMain()">
+          Izveidot pasākumu
+        </button>
+      </div>
+      }
+    </div>
+  </form>
+</div>
