@@ -10,15 +10,15 @@ export class ManiPasakumiService {
     private readonly URL: string = 'http://localhost:8090/api/v1';
     private http: HttpClient = inject(HttpClient);
 
-    iegutVisusPasakumus(): Observable<ManiPasakumiinterface[]> {
+    iegutVisusPasakumus(): Observable<any> {
         return this.http.get<ManiPasakumiinterface[]>(`${this.URL}/manipasakumi`);
     }
 
-    pievienotPasakumu(pasakums: ManiPasakumiinterface): Observable<ManiPasakumiinterface> {
+    pievienotPasakumu(pasakums: ManiPasakumiinterface): Observable <any> {
         return this.http.post<ManiPasakumiinterface>(`${this.URL}/manipasakumi`, pasakums);
     }
     
-    dzestPasakumu(id: number): Observable<void> {
+    dzestPasakumu(id: number): Observable<any> {
         return this.http.delete<void>(`${this.URL}/manipasakumi/${id}`);
     }
 }

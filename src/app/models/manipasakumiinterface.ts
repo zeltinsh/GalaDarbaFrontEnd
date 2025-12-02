@@ -7,3 +7,8 @@ export interface ManiPasakumiinterface {
     pasakumaVieta: string;
     dalibniekuSkaits: number;
 }
+
+
+export interface PasakumuSaraksts {
+    pasakumaArrays: ManiPasakumiinterface[];
+}
