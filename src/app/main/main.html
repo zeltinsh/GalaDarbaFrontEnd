@@ -10,8 +10,6 @@
   <div class="container-fluid mt-4">
     <h2>Pievienot jaunu pasākumu</h2>
     <form>
-      @for(pasakums of pasakumaSignals().pasakumaArrays; track $index; let i = $index) {
-      console.log(pasakums);
       <div class="mb-3">
         <label class="form-label">Pasākuma nosaukums</label>
         <input type="text" id="pasakumaNosaukums-{{ i }}" class="form-control" />
