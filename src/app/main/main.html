@@ -7,43 +7,59 @@
     height: 100vh;
   "
 >
-  <div class="container-fluid mt-4">
+  <div>
     <h2>Pievienot jaunu pasākumu</h2>
-    <form>
-      <div class="mb-3">
-        <label class="form-label">Pasākuma nosaukums</label>
-        <input type="text" id="pasakumaNosaukums-{{ i }}" class="form-control" />
+    <div>
+      <label for="pasakumaNosaukums"><h6 class="fw-bold text-grey">Pasākuma nosaukums:</h6></label>
+      <input
+        type="text"
+        placeholder="pasakumaNosaukums"
+        [field]="pasakumaForma.pasakumaNosaukums"
+      />
+    </div>
+    <div>
+      <label for="pasakumaApraksts"><h6 class="fw-bold text-grey">Pasākuma apraksts:</h6></label>
+      <input type="text" placeholder="pasakumaApraksts" [field]="pasakumaForma.pasakumaApraksts" />
+      <div>
+        <label for="pasakumaDatums"><h6 class="fw-bold text-grey">Pasākuma datums:</h6></label>
+        <input type="date" placeholder="pasakumaDatums" [field]="pasakumaForma.pasakumaDatums" />
       </div>
-
-      <div class="mb-3">
-        <label class="form-label">Pasākuma apraksts</label>
-        <textarea class="form-control" rows="3"> </textarea>
+      <div>
+        <label for="pasakumaLaiks"><h6 class="fw-bold text-grey">Pasākuma laiks:</h6></label>
+        <input type="time" placeholder="pasakumaLaiks" [field]="pasakumaForma.pasakumaLaiks" />
       </div>
-
-      <div class="mb-3">
-        <label class="form-label">Pasākuma datums</label>
-        <input type="date" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Pasākuma laiks</label>
-        <input type="time" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Pasākuma atrasšanās vieta</label>
-        <input type="text" class="form-control" />
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Maksimālais dalībnieku skaits</label>
-        <input type="number" class="form-control" />
-      </div>
-
-      <button type="button" class="btn btn-primary" (click)="pievienotPasakumu()">
+    </div>
+    <div>
+      <label for="pasakumaVieta"><h6 class="fw-bold text-grey">Pasākuma vieta:</h6></label>
+      <input type="text" placeholder="pasakumaVieta" [field]="pasakumaForma.pasakumaVieta" />
+    </div>
+    <div>
+      <label for="dalibniekuSkaits"><h6 class="fw-bold text-grey">Dalībnieku skaits:</h6></label>
+      <input
+        type="number"
+        placeholder="dalibniekuSkaits"
+        [field]="pasakumaForma.dalibniekuSkaits"
+      />
+    </div>
+    <div>
+      <button class="btn btn-outline-dark p-0" type="button" (click)="pievienotPasakumu()">
         Pievienot pasākumu
       </button>
-      }
-    </form>
+    </div>
+    <div>
+      <button class="btn btn-outline-dark p-0" type="button" (click)="iegutVisusPasakumus()">
+        Apskatīt visus pasākumus
+      </button>
+    </div>
+  </div>
+  <div>
+    @for (pasakums of visuPasakumaSignals().pasakumaArrays; track $index) { Pasakuma nosaukums:
+    {{ pasakums.pasakumaNosaukums }} <br />
+    Apraksts: {{ pasakums.pasakumaApraksts }} <br />
+    Datums: {{ pasakums.pasakumaDatums }} <br />
+    Laiks: {{ pasakums.pasakumaLaiks }} <br />
+    Vieta: {{ pasakums.pasakumaVieta }} <br />
+    Dalībnieku skaits: {{ pasakums.dalibniekuSkaits }} <br />
+    }
   </div>
 </div>

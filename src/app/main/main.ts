@@ -4,56 +4,71 @@ import { Router } from '@angular/router';
 import { ManiPasakumiinterface, PasakumuSaraksts } from '../models/manipasakumiinterface';
 import { applyEach, Field, form, required } from '@angular/forms/signals';
 import { Utilities } from '../utilities/utilities';
+import { FormGroup } from '@angular/forms';
+import { Header } from "../header/header";
 
 @Component({
   selector: 'app-main',
-  imports: [Field],
+  imports: [Field, Header],
   templateUrl: './main.html',
   styleUrls: ['./main.css'],
 })
-export class Main implements OnInit {
+export class Main {
   
   private maniPasakumiService = inject(ManiPasakumiService);
   private router = inject(Router);
   private utilities = inject(Utilities);
   
-  protected pasakumaSignals = signal<PasakumuSaraksts>({
-    pasakumaArrays: [this.utilities.createTuksPasakums()]
-  });
-  pasākumaForma = form(this.pasakumaSignals, (formasPath) => {
-    applyEach(formasPath.pasakumaArrays, (arajaElementaPath) => {
-      required(arajaElementaPath.pasakumaNosaukums, { message: 'Nosaukums ir obligāts lauks' });
-    });
+  visuPasakumaSignals = signal<PasakumuSaraksts>({
+    // pasakumaArrays: [this.utilities.createTuksPasakums()]
+    pasakumaArrays: [],
   });
 
-  ngOnInit(): void {
-    // Load existing events if needed
+  protected pasakumaSignals = signal<ManiPasakumiinterface>({
+    pasakumaNosaukums: '',
+    pasakumaApraksts: '',
+    pasakumaDatums: '',
+    pasakumaLaiks: '',
+    pasakumaVieta: '',
+    dalibniekuSkaits: 0,
+  });
+
+  
+ pasakumaForma = form(this.pasakumaSignals, (path) => {
+    required(path.pasakumaNosaukums, { message: 'Pasākuma nosaukums ir obligāts' });
+    required(path.pasakumaApraksts, { message: 'Pasākuma apraksts ir obligāts' });
+    required(path.pasakumaDatums, { message: 'Pasākuma datums ir obligāts' });
+    required(path.pasakumaLaiks, { message: 'Pasākuma laiks ir obligāts' });
+    required(path.pasakumaVieta, { message: 'Pasākuma vieta ir obligāta' });
+    required(path.dalibniekuSkaits, { message: 'Dalībnieku skaits ir obligāts' });
+  });
+  
+  iegutVisusPasakumus() {
+    this.maniPasakumiService.iegutVisusPasakumus().subscribe({ 
+      next: (response) => {
+        console.log('Iegūti visi pasākumi:', response);
+        this.visuPasakumaSignals.update(() => ({
+          pasakumaArrays: response
+        }));
+      },
+      error: (err: any) => console.log('Kļūda iegūstot pasākumus:', err)
+    });
   }
 
- 
-
-  pievienotPasakumu(): void {
-    const pasakumi: ManiPasakumiinterface[] = this.pasakumaSignals().pasakumaArrays;
-    if (pasakumi.length === 0) return;
+  pievienotPasakumu() {
+    console.log('Pievienot pasākumu pogu nospiesta', this.pasakumaSignals());
+    console.log('Forma vērtība:', this.pasakumaForma().value());
     
-    const pedejaisPasākums: ManiPasakumiinterface = pasakumi[pasakumi.length - 1];
-   this.maniPasakumiService.pievienotPasakumu(pedejaisPasākums).subscribe({
-      next: (response) => {
-               if (response.id) {
-          this.pasakumaSignals.update(data => ({
-            pasakumaArrays: [
-              ...data.pasakumaArrays.slice(0, -1), // Remove last event
-              { ...pedejaisPasākums, id: response.id }, // Add last event with new ID
-              this.utilities.createTuksPasakums() // Add new empty event
-            ]
-          }));
-          
-        }
+    this.maniPasakumiService.pievienotPasakumu(this.pasakumaForma().value()).subscribe({
+      next: (response: ManiPasakumiinterface) => {
+        console.log('Pasākums veiksmīgi pievienots:', response);
+        this.visuPasakumaSignals.update((esosais: PasakumuSaraksts) => ({
+          pasakumaArrays: [...esosais.pasakumaArrays, response],
+        }));
       },
-     error: (err: any) => {
-      console.error('Kļūda pievienojot pasākumu:', err); 
-
-      }
+      error: (err: any) => {
+        console.log('Kļūda pievienojot pasākumu:', err);
+      },
     });
   }
 }

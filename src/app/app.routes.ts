@@ -9,5 +9,6 @@ export const routes: Routes = [
   { path: 'header', component: Header },
   { path: 'main', component: Main },
   { path: 'mani-pasakumi', component: ManiPasakumi }
+  
     
 ];
