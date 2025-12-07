@@ -9,20 +9,23 @@ import { Header } from "../header/header";
 
 @Component({
   selector: 'app-main',
-  imports: [Field, Header],
+  imports: [Field],
   templateUrl: './main.html',
   styleUrls: ['./main.css'],
 })
-export class Main {
+export class Main implements OnInit {
   
   private maniPasakumiService = inject(ManiPasakumiService);
   private router = inject(Router);
   private utilities = inject(Utilities);
   
   visuPasakumaSignals = signal<PasakumuSaraksts>({
-    // pasakumaArrays: [this.utilities.createTuksPasakums()]
-    pasakumaArrays: [],
+        pasakumaArrays: [],
   });
+
+  ngOnInit() {
+    this.iegutVisusPasakumus();
+  }
 
   protected pasakumaSignals = signal<ManiPasakumiinterface>({
     pasakumaNosaukums: '',
