@@ -4,37 +4,51 @@
     background-image: url('images/login2.jpg');
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 40px 0;
   "
 >
-  <br />
   <div class="container-fluid">
-    <h2>Pieslēgties sistēmai</h2>
-    <form [formGroup]="loginForm">
-      <label>
-        <h6 class="fw-bold text-grey">Lietotāja vārds:</h6>
-        <input formControlName="username" type="text" />
-      </label>
-      <label>
-        <h6 class="fw-bold text-grey">Parole:</h6>
-        <input formControlName="password" type="password" />
-      </label>
-      <div class="row">
-        <div class="col-sm-2">
-          <button
-            class="btn btn-outline-dark p-0"
-            type="button"
-            (click)="onSubmit()"
-          >
-            Pieslēgties
-          </button>
-        </div>
-        <div class="col-sm-5">
-          <button class="btn btn-outline-dark p-0" type="button" (click)="onSignUp()">
-            Reģistrēties
-          </button>
+    <div class="row">
+      <div class="col-lg-3 col-md-4">
+        <div class="card shadow-lg" style="background-color: rgba(255, 255, 255, 0.5)">
+          <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Pieslēgties sistēmai</h2>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="loginForm">
+              <div class="mb-3">
+                <label for="username" class="form-label fw-bold">Lietotāja vārds:</label>
+                <input
+                  formControlName="username"
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  placeholder="Ievadiet lietotāja vārdu"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label fw-bold">Parole:</label>
+                <input
+                  formControlName="password"
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Ievadiet paroli"
+                />
+              </div>
+
+              <div class="d-grid gap-2">
+                <button class="btn btn-dark" type="button" (click)="onSubmit()">Pieslēgties</button>
+                <button class="btn btn-outline-secondary" type="button" (click)="onSignUp()">
+                  Reģistrēties
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </div>

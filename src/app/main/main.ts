@@ -1,11 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ManiPasakumiService } from '../services/mani-pasakumi';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ManiPasakumiinterface, PasakumuSaraksts } from '../models/manipasakumiinterface';
-import { applyEach, Field, form, required } from '@angular/forms/signals';
-import { Utilities } from '../utilities/utilities';
-import { FormGroup } from '@angular/forms';
-import { Header } from "../header/header";
+import { Field } from '@angular/forms/signals';
+import { SecondUtilities } from '../utilities/utilities';
+import { ManiPasakumiinterface } from '../models/manipasakumiinterface';
 
 @Component({
   selector: 'app-main',
@@ -15,63 +12,68 @@ import { Header } from "../header/header";
 })
 export class Main implements OnInit {
   
-  private maniPasakumiService = inject(ManiPasakumiService);
   private router = inject(Router);
-  private utilities = inject(Utilities);
+  protected secondUtilities = inject(SecondUtilities);
   
-  visuPasakumaSignals = signal<PasakumuSaraksts>({
-        pasakumaArrays: [],
-  });
-
-  ngOnInit() {
-    this.iegutVisusPasakumus();
+   get visuPasakumaSignals() {
+    return this.secondUtilities.visuPasakumaSignals;
+  }
+  
+  get pasakumaForma() {
+    return this.secondUtilities.pasakumaForma;
   }
 
-  protected pasakumaSignals = signal<ManiPasakumiinterface>({
-    pasakumaNosaukums: '',
-    pasakumaApraksts: '',
-    pasakumaDatums: '',
-    pasakumaLaiks: '',
-    pasakumaVieta: '',
-    dalibniekuSkaits: 0,
-  });
+  ngOnInit() {
+    this.secondUtilities.iegutVisusPasakumus();
+  }
 
-  
- pasakumaForma = form(this.pasakumaSignals, (path) => {
-    required(path.pasakumaNosaukums, { message: 'Pasākuma nosaukums ir obligāts' });
-    required(path.pasakumaApraksts, { message: 'Pasākuma apraksts ir obligāts' });
-    required(path.pasakumaDatums, { message: 'Pasākuma datums ir obligāts' });
-    required(path.pasakumaLaiks, { message: 'Pasākuma laiks ir obligāts' });
-    required(path.pasakumaVieta, { message: 'Pasākuma vieta ir obligāta' });
-    required(path.dalibniekuSkaits, { message: 'Dalībnieku skaits ir obligāts' });
-  });
-  
   iegutVisusPasakumus() {
-    this.maniPasakumiService.iegutVisusPasakumus().subscribe({ 
-      next: (response) => {
-        console.log('Iegūti visi pasākumi:', response);
-        this.visuPasakumaSignals.update(() => ({
-          pasakumaArrays: response
-        }));
-      },
-      error: (err: any) => console.log('Kļūda iegūstot pasākumus:', err)
-    });
+    this.secondUtilities.iegutVisusPasakumus();
+  }
+
+  get todayDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   pievienotPasakumu() {
-    console.log('Pievienot pasākumu pogu nospiesta', this.pasakumaSignals());
-    console.log('Forma vērtība:', this.pasakumaForma().value());
+    const selectedDate = this.secondUtilities.pasakumaForma().value().pasakumaDatums;
+    const today = this.todayDate;
     
-    this.maniPasakumiService.pievienotPasakumu(this.pasakumaForma().value()).subscribe({
-      next: (response: ManiPasakumiinterface) => {
-        console.log('Pasākums veiksmīgi pievienots:', response);
-        this.visuPasakumaSignals.update((esosais: PasakumuSaraksts) => ({
-          pasakumaArrays: [...esosais.pasakumaArrays, response],
-        }));
-      },
-      error: (err: any) => {
-        console.log('Kļūda pievienojot pasākumu:', err);
-      },
-    });
+    if (selectedDate < today) {
+      alert('Nevar izveidot pasākumu pagātnē! Lūdzu, izvēlieties nākotnes datumu.');
+      return;
+    }
+    
+    this.secondUtilities.pievienotPasakumu();
+  }
+
+  pieteiktiesPasakumam(pasakums: ManiPasakumiinterface) {
+    if (!pasakums.id) return;
+        const pieteikusiesDalibnieki = pasakums.pieteikusiesDalibnieki || 0;
+        if (pieteikusiesDalibnieki >= pasakums.dalibniekuSkaits) {
+      alert('Pasākumam ir sasniegts maksimālais dalībnieku skaits!');
+      return;
+    }
+        pasakums.pieteikusiesDalibnieki = pieteikusiesDalibnieki + 1;
+        console.log('Pieteikts pasākumam:', pasakums.pasakumaNosaukums);
+  }
+  
+  atteiktiesNoPasakuma(pasakums: ManiPasakumiinterface) {
+    if (!pasakums.id) return;
+        const pieteikusiesDalibnieki = pasakums.pieteikusiesDalibnieki || 0;
+        if (pieteikusiesDalibnieki <= 0) {
+      alert('Jūs neesat pieteicies šim pasākumam!');
+      return;
+    }
+    pasakums.pieteikusiesDalibnieki = pieteikusiesDalibnieki - 1;
+    console.log('Atteikts no pasākuma:', pasakums.pasakumaNosaukums);
+  }
+
+  navigateToManiPasakumi() {
+    this.router.navigate(['/mani-pasakumi']);
   }
 }

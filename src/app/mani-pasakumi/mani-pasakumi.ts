@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ManiPasakumiinterface, PasakumuSaraksts } from '../models/manipasakumiinterface';
 import { ManiPasakumiService } from '../services/mani-pasakumi';
 import { HttpResponse } from '@angular/common/http';
-import { Utilities } from '../utilities/utilities';
+import { SecondUtilities, Utilities } from '../utilities/utilities';
 
 @Component({
   selector: 'app-mani-pasakumi',
@@ -14,35 +14,42 @@ import { Utilities } from '../utilities/utilities';
 })
 export class ManiPasakumi implements OnInit {
 
-  private maniPasakumiService = inject(ManiPasakumiService);
   private router = inject(Router);
-  private utilities = inject(Utilities);
+  private maniPasakumiService = inject(ManiPasakumiService);
+  secondUtilities = inject(SecondUtilities);
+  
+   get visuPasakumaSignals() {
+    return this.secondUtilities.visuPasakumaSignals;
+  }
+  
+  get pasakumaForma() {
+    return this.secondUtilities.pasakumaForma;
+  }
 
-  protected pasakumiSignals = signal<PasakumuSaraksts>({
-    pasakumaArrays: []
-  });
+  ngOnInit() {
+    this.secondUtilities.iegutVisusPasakumus();
+  }
 
-  ngOnInit(): void {
-    this.maniPasakumiService.iegutVisusPasakumus().subscribe({ 
-      next: (response: HttpResponse<ManiPasakumiinterface[]>) => {
-        const ManiPasakumiinterface = response.body;
-        if (ManiPasakumiinterface && ManiPasakumiinterface.length > 0) {
-this.pasakumiSignals.update(() => ({
-    pasakumaArrays: [...ManiPasakumiinterface, this.utilities.createTuksPasakums()]
-          }));
-        } else {
-          this.pasakumiSignals.set({
-            pasakumaArrays: [this.utilities.createTuksPasakums()]
+  iegutVisusPasakumus() {
+    this.secondUtilities.iegutVisusPasakumus();
+  }
+
+  dzestPasakumu(id: number) {
+    if (confirm('Vai tiešām vēlaties dzēst šo pasākumu?')) {
+      this.maniPasakumiService.dzestPasakumu(id).subscribe({
+        next: () => {
+          console.log('Pasākums veiksmīgi dzēsts:', id);
+                  this.secondUtilities.visuPasakumaSignals.set({
+            pasakumaArrays: this.secondUtilities.visuPasakumaSignals().pasakumaArrays.filter(
+              pasakums => pasakums.id !== id
+            )
           });
+        },
+        error: (err: any) => {
+          console.log('Kļūda dzēšot pasākumu:', err);
         }
-      },
-      error: (err: any) => {
-        console.error('Kļūda iegūstot rezervētos pasākumus', err);
-        this.pasakumiSignals.set({
-          pasakumaArrays: [this.utilities.createTuksPasakums()]
-        });
-      }
-    });
+      });
+    }
   }
 
   navigateToMain() {

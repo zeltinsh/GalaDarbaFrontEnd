@@ -4,52 +4,47 @@
     background-image: url('images/login2.jpg');
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 40px 0;
   "
 >
-  <form>
-    <div class="container-fluid mt-4">
-      @if (pasakumiSignals().pasakumaArrays.length > 0) {
-      <div class="row">
-        <div class="col-12">
-          <h3>Pasākumu saraksts</h3>
+  <div class="container-fluid px-4">
+    <h1 class="text-grey mb-4">Mani pasākumi</h1>
+
+    @if (secondUtilities.visuPasakumaSignals().pasakumaArrays.length === 0) {
+    <div class="alert alert-info">Nav atrasts neviens pasākums.</div>
+    }
+
+    <div class="row">
+      <div class="col-lg-6 col-md-6 mb-4">
+        <div class="d-flex justify-content-start mb-3">
+          <button class="btn btn-dark" type="button" (click)="navigateToMain()">Atpakaļ</button>
+        </div>
+        <div class="row">
+          @for (pasakums of secondUtilities.visuPasakumaSignals().pasakumaArrays; track pasakums.id
+          || $index) { @if (pasakums.pasakumaNosaukums) {
+          <div class="col-12 mb-3">
+            <div class="card shadow" style="background-color: rgba(255, 255, 255, 0.5)">
+              <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">{{ pasakums.pasakumaNosaukums }}</h5>
+              </div>
+              <div class="card-body">
+                <p class="mb-2"><strong>Apraksts:</strong> {{ pasakums.pasakumaApraksts }}</p>
+                <p class="mb-2"><strong>Datums:</strong> {{ pasakums.pasakumaDatums }}</p>
+                <p class="mb-2"><strong>Laiks:</strong> {{ pasakums.pasakumaLaiks }}</p>
+                <p class="mb-2"><strong>Vieta:</strong> {{ pasakums.pasakumaVieta }}</p>
+                <p class="mb-3">
+                  <strong>Dalībnieku skaits:</strong> {{ pasakums.dalibniekuSkaits }}
+                </p>
+                <button class="btn btn-danger" type="button" (click)="dzestPasakumu(pasakums.id!)">
+                  Dzēst pasākumu
+                </button>
+              </div>
+            </div>
+          </div>
+          } }
         </div>
       </div>
-      @for(pasakums of pasakumiSignals().pasakumaArrays; track pasakums.id) {
-      <div class="row g-1 flex-nowrap mb-3 border-bottom pb-2">
-        <div class="col">
-          <label class="form-label small fw-bold">Pasākuma nosaukums:</label>
-          <p class="mb-0">{{ pasakums.pasakumaNosaukums }}</p>
-        </div>
-        <div class="col">
-          <label class="form-label small fw-bold">Apraksts:</label>
-          <p class="mb-0">{{ pasakums.pasakumaApraksts }}</p>
-        </div>
-        <div class="col">
-          <label class="form-label small fw-bold">Datums:</label>
-          <p class="mb-0">{{ pasakums.pasakumaDatums }}</p>
-        </div>
-        <div class="col">
-          <label class="form-label small fw-bold">Laiks:</label>
-          <p class="mb-0">{{ pasakums.pasakumaLaiks }}</p>
-        </div>
-        <div class="col">
-          <label class="form-label small fw-bold">Vieta:</label>
-          <p class="mb-0">{{ pasakums.pasakumaVieta }}</p>
-        </div>
-        <div class="col">
-          <label class="form-label small fw-bold">Dalībnieku skaits:</label>
-          <p class="mb-0">{{ pasakums.dalibniekuSkaits }}</p>
-        </div>
-      </div>
-      } } @else {
-      <div class="alert alert-info" role="alert">Jūs neesat pieteicies nevienam pasākumam.</div>
-      <div>
-        <button class="btn btn-outline-dark p-0" type="button" (click)="navigateToMain()">
-          Pieteikties pasākumam
-        </button>
-      </div>
-      }
     </div>
-  </form>
+  </div>
 </div>

@@ -52,7 +52,7 @@ export class Login {
       this.userService.login(this.user).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
-          this.router.navigate(['/header']);
+          this.router.navigate(['/main']);
         },
         error: (error) => {
           console.error('Login failed:', error);
@@ -63,6 +63,6 @@ export class Login {
   }
   onSignUp() {
     console.log("Sign Up clicked"); 
-    this.router.navigate(['/header']);
+    this.router.navigate(['/main']);
   }
 }

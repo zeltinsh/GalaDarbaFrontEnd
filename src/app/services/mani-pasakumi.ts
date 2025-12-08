@@ -21,4 +21,12 @@ export class ManiPasakumiService {
     dzestPasakumu(id: number): Observable<any> {
         return this.http.delete<void>(`${this.URL}/manipasakumi/${id}`);
     }
+
+    pieteiktiesPasakumam(pasakums: ManiPasakumiinterface): Observable<any> {
+        return this.http.put<ManiPasakumiinterface>(`${this.URL}/manipasakumi/${pasakums.id}`, pasakums);
+    }
+
+    atteiktiesNoPasakuma(pasakumaId: number, userId: number): Observable<any> {
+        return this.http.delete<ManiPasakumiinterface>(`${this.URL}/manipasakumi/${pasakumaId}/dalibnieki/${userId}`);
+}
 }

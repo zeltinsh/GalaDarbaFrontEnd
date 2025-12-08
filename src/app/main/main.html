@@ -11,7 +11,12 @@
   <div class="container-fluid px-4">
     <div class="row">
       <div class="col-lg-4 col-md-5">
-        <div class="card shadow-lg">
+        <div class="d-flex justify-content-start mb-3">
+          <button class="btn btn-dark btn-lg px-4" type="button" (click)="navigateToManiPasakumi()">
+            Mani pasākumi
+          </button>
+        </div>
+        <div class="card shadow-lg" style="background-color: rgba(255, 255, 255, 0.5)">
           <div class="card-header bg-dark text-white">
             <h2 class="mb-0">Pievienot jaunu pasākumu</h2>
           </div>
@@ -49,6 +54,7 @@
                   id="pasakumaDatums"
                   [field]="pasakumaForma.pasakumaDatums"
                 />
+                <small class="text-muted">Var izvēlēties tikai šodienas vai nākotnes datumu</small>
               </div>
 
               <div class="mb-3">
@@ -73,7 +79,9 @@
               </div>
 
               <div class="mb-3">
-                <label for="dalibniekuSkaits" class="form-label fw-bold">Dalībnieku skaits:</label>
+                <label for="dalibniekuSkaits" class="form-label fw-bold"
+                  >Maksimālais dalībnieku skaits:</label
+                >
                 <input
                   type="number"
                   class="form-control"
@@ -98,7 +106,7 @@
           @for (pasakums of visuPasakumaSignals().pasakumaArrays; track pasakums.id || $index) { @if
           (pasakums.pasakumaNosaukums) {
           <div class="col-12 mb-3">
-            <div class="card shadow">
+            <div class="card shadow" style="background-color: rgba(255, 255, 255, 0.7)">
               <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">{{ pasakums.pasakumaNosaukums }}</h5>
               </div>
@@ -107,9 +115,30 @@
                 <p class="mb-2"><strong>Datums:</strong> {{ pasakums.pasakumaDatums }}</p>
                 <p class="mb-2"><strong>Laiks:</strong> {{ pasakums.pasakumaLaiks }}</p>
                 <p class="mb-2"><strong>Vieta:</strong> {{ pasakums.pasakumaVieta }}</p>
-                <p class="mb-0">
-                  <strong>Dalībnieku skaits:</strong> {{ pasakums.dalibniekuSkaits }}
+                <p class="mb-3">
+                  <strong>Dalībnieki:</strong>
+                  {{ pasakums.pieteikusiesDalibnieki || 0 }} / {{ pasakums.dalibniekuSkaits }}
+                  @if ((pasakums.pieteikusiesDalibnieki || 0) >= pasakums.dalibniekuSkaits) {
+                  <span class="badge bg-danger ms-2">Pilns</span>
+                  }
                 </p>
+                <div class="d-grid gap-2">
+                  <button
+                    class="btn btn-success"
+                    type="button"
+                    (click)="pieteiktiesPasakumam(pasakums)"
+                    [disabled]="(pasakums.pieteikusiesDalibnieki || 0) >= pasakums.dalibniekuSkaits"
+                  >
+                    Pieteikties
+                  </button>
+                  <button
+                    class="btn btn-warning"
+                    type="button"
+                    (click)="atteiktiesNoPasakuma(pasakums)"
+                  >
+                    Atteikties
+                  </button>
+                </div>
               </div>
             </div>
           </div>

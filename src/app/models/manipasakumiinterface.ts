@@ -6,6 +6,7 @@ export interface ManiPasakumiinterface {
     pasakumaLaiks: string;
     pasakumaVieta: string;
     dalibniekuSkaits: number;
+    pieteikusiesDalibnieki?: number;
 }
 
 
